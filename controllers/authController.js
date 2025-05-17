@@ -32,7 +32,7 @@ const getAccess = catchAsync(async (req, res, next) => {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
-        redirect_uri: `http://localhost:${PORT}/v1/auth/google/callback`,
+        redirect_uri: `https://kaviopix-api.vercel.app/v1/auth/google/callback`,
       },
       { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );

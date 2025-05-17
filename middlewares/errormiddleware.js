@@ -36,16 +36,21 @@ const globalErrorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
+    console.log(err);
     let error = {
       name: err.name,
       message: err.message,
-      code: err.code,
+      statusCode: err.statusCode,
+      status: err.status,
+      isOperational: err.isOperational,
       stack: err.stack,
       errors: err.errors,
       path: err.path,
       value: err.value,
       keyValue: err.keyValue,
     };
+
+    console.log(error);
 
     //! Mongoose errors
     if (error.name === "CastError") error = handleCastErrorDB(error);
