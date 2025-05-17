@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 // Authorize Client
 const authorizeClient = catchAsync(async (req, res) => {
-  const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.FRONTEND_URL}&response_type=code&scope=profile email&prompt=select_account`;
+  const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://kaviopix-api.vercel.app/v1/auth/google/callback&response_type=code&scope=profile email&prompt=select_account`;
 
   res.redirect(googleAuthURL);
 });
@@ -32,7 +32,7 @@ const getAccess = catchAsync(async (req, res, next) => {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
-        redirect_uri: `${process.env.FRONTEND_URL}`,
+        redirect_uri: `https://kaviopix-api.vercel.app/v1/auth/google/callback`,
       },
       { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );
