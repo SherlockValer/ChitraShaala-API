@@ -39,8 +39,8 @@ const getAccess = catchAsync(async (req, res, next) => {
 
     accessToken = tokenResponse.data.access_token;
     setSecureCookies(res, accessToken);
-    return res.redirect(`https://kaviopix-api.vercel.app/v1/albums`);
-    // ${process.env.FRONTEND_URL}
+    return res.redirect(`${process.env.FRONTEND_URL}`);
+    //
   } catch (error) {
     console.error(error);
   }
