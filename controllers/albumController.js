@@ -1,22 +1,28 @@
 const catchAsync = require("../utils/catchAsync");
 const Album = require("../models/album.model");
+const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
 
 const getAlbums = catchAsync(async (req, res) => {
-  const albums = await Album.find();
+  const currentUser = req.user;
+
+  const myAlbums = await Album.find({ ownerId: currentUser._id });
+  const sharedAlbums = await Album.find({ sharedUsers: currentUser.email });
 
   res.status(200).json({
     status: "success",
-    data: albums,
+    myAlbums,
+    sharedAlbums,
   });
 });
 
 const createAlbum = catchAsync(async (req, res) => {
-  const { name, description, ownerId } = req.body;
+  const currentUser = req.user;
+  const { name, description } = req.body;
 
   const newAlbum = new Album({
     name,
     description,
-    ownerId: req.users._id,
+    ownerId: currentUser._id,
   });
 
   const saved = await newAlbum.save();
@@ -29,6 +35,8 @@ const createAlbum = catchAsync(async (req, res) => {
 
 const editAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
+
+  verifyAlbumOwner();
 
   const updateAlbum = await Album.findByIdAndUpdate(albumId, req.body, {
     new: true,
@@ -43,6 +51,8 @@ const editAlbum = catchAsync(async (req, res) => {
 const shareAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
+  verifyAlbumOwner();
+
   const shared = await Album.findByIdAndUpdate(albumId, req.body, {
     new: true,
   });
@@ -55,6 +65,8 @@ const shareAlbum = catchAsync(async (req, res) => {
 
 const deleteAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
+
+  verifyAlbumOwner();
 
   const deleted = await Album.findByIdAndDelete(albumId);
 

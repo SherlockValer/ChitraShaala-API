@@ -2,11 +2,13 @@ const catchAsync = require("../utils/catchAsync");
 const Image = require("../models/image.model");
 const AppError = require("../utils/AppError");
 const uploadOnCloudinary = require("../utils/cloudinary");
+const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
 
 //! GET
 
 const getImages = catchAsync(async (req, res) => {
   const { albumId } = req.params;
+  verifyAlbumOwner();
 
   const images = await Image.find({ albumId });
 
@@ -18,6 +20,8 @@ const getImages = catchAsync(async (req, res) => {
 
 const getFavImages = catchAsync(async (req, res) => {
   const { albumId } = req.params;
+
+  verifyAlbumOwner();
 
   const favImages = await Image.find({ albumId, isFavorite: true });
 
@@ -33,6 +37,9 @@ const getImagesByTag = catchAsync(async (req, res) => {
   }
 
   const { albumId } = req.params;
+
+  verifyAlbumOwner();
+
   const { tags } = req.query;
 
   const images = await Image.find({ albumId, tags });
@@ -53,6 +60,7 @@ const uploadImage = catchAsync(async (req, res, next) => {
   }
 
   const { albumId } = req.params;
+  verifyAlbumOwner();
 
   // upload to cloudinary
   const response = await uploadOnCloudinary(req.file.path);
@@ -72,8 +80,10 @@ const uploadImage = catchAsync(async (req, res, next) => {
 });
 
 const starImage = catchAsync(async (req, res) => {
-  const { imageId } = req.params;
+  const { imageId, albumId } = req.params;
   const { isFavorite } = req.body;
+
+  verifyAlbumOwner();
 
   const starred = await Image.findByIdAndUpdate(
     imageId,
@@ -88,8 +98,10 @@ const starImage = catchAsync(async (req, res) => {
 });
 
 const addComment = catchAsync(async (req, res) => {
-  const { imageId } = req.params;
+  const { imageId, albumId } = req.params;
   const { comment } = req.body;
+
+  verifyAlbumOwner();
 
   const commented = await Image.findByIdAndUpdate(
     imageId,
@@ -106,7 +118,8 @@ const addComment = catchAsync(async (req, res) => {
 //! DELETE
 
 const deleteImage = catchAsync(async (req, res) => {
-  const { imageId } = req.params;
+  const { imageId, albumId } = req.params;
+  verifyAlbumOwner();
 
   const deleted = await Image.findByIdAndDelete(imageId);
 
