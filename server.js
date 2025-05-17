@@ -51,7 +51,7 @@ app.use(limiter);
 app.use(hpp());
 
 // Enable CORS
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true }));
 
 // Compression
 app.use(compression());
