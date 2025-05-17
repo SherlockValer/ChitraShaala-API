@@ -51,7 +51,7 @@ app.use(limiter);
 app.use(hpp());
 
 // Enable CORS
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 
 // Compression
 app.use(compression());
