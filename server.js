@@ -48,6 +48,8 @@ if (process.env.NODE_ENV === "development") {
 // Set security headers
 app.use(helmet());
 
+app.set("trust proxy", true); // 🚨 Important for rate limiting behind proxy
+
 // rate limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
