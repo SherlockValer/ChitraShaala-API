@@ -8,7 +8,7 @@ const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
 
 const getImages = catchAsync(async (req, res) => {
   const { albumId } = req.params;
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const images = await Image.find({ albumId });
 
@@ -21,7 +21,7 @@ const getImages = catchAsync(async (req, res) => {
 const getFavImages = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const favImages = await Image.find({ albumId, isFavorite: true });
 
@@ -38,7 +38,7 @@ const getImagesByTag = catchAsync(async (req, res) => {
 
   const { albumId } = req.params;
 
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const { tags } = req.query;
 
@@ -60,7 +60,7 @@ const uploadImage = catchAsync(async (req, res, next) => {
   }
 
   const { albumId } = req.params;
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   // upload to cloudinary
   const response = await uploadOnCloudinary(req.file.path);
@@ -83,7 +83,7 @@ const starImage = catchAsync(async (req, res) => {
   const { imageId, albumId } = req.params;
   const { isFavorite } = req.body;
 
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const starred = await Image.findByIdAndUpdate(
     imageId,
@@ -101,7 +101,7 @@ const addComment = catchAsync(async (req, res) => {
   const { imageId, albumId } = req.params;
   const { comment } = req.body;
 
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const commented = await Image.findByIdAndUpdate(
     imageId,
@@ -119,7 +119,7 @@ const addComment = catchAsync(async (req, res) => {
 
 const deleteImage = catchAsync(async (req, res) => {
   const { imageId, albumId } = req.params;
-  verifyAlbumOwner(albumId);
+  verifyAlbumOwner(albumId, req);
 
   const deleted = await Image.findByIdAndDelete(imageId);
 
