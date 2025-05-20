@@ -48,7 +48,8 @@ if (process.env.NODE_ENV === "development") {
 // Set security headers
 app.use(helmet());
 
-app.set("trust proxy", true); // 🚨 Important for rate limiting behind proxy
+// app.set("trust proxy", true); // 🚨 Important for rate limiting behind proxy
+app.set("trust proxy", 1); // 🚨 Only trust 1 proxy!
 
 // rate limiting
 const limiter = rateLimit({
