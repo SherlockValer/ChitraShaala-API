@@ -36,7 +36,7 @@ const createAlbum = catchAsync(async (req, res) => {
 const editAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner();
+  verifyAlbumOwner(albumId);
 
   const updateAlbum = await Album.findByIdAndUpdate(albumId, req.body, {
     new: true,
@@ -51,7 +51,7 @@ const editAlbum = catchAsync(async (req, res) => {
 const shareAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner();
+  verifyAlbumOwner(albumId);
 
   const shared = await Album.findByIdAndUpdate(albumId, req.body, {
     new: true,
@@ -66,7 +66,7 @@ const shareAlbum = catchAsync(async (req, res) => {
 const deleteAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner();
+  verifyAlbumOwner(albumId);
 
   const deleted = await Album.findByIdAndDelete(albumId);
 

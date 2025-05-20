@@ -1,5 +1,7 @@
-async function verifyAlbumOwner() {
-  const { ownerId } = await Album.findById(albumId);
+const Album = require("../models/album.model");
+
+async function verifyAlbumOwner(id) {
+  const { ownerId } = await Album.findById(id);
   if (ownerId !== req.user._id) {
     return next(
       new AppError(
