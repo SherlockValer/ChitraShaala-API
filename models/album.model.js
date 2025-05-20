@@ -4,7 +4,7 @@ const { randomUUID } = require("crypto");
 const albumSchema = new mongoose.Schema(
   {
     _id: {
-      type: mongoose.Schema.Types.UUID,
+      type: String,
       default: () => randomUUID(),
     },
     name: {
@@ -13,7 +13,7 @@ const albumSchema = new mongoose.Schema(
     },
     description: { type: String },
     ownerId: {
-      type: mongoose.Schema.Types.UUID,
+      type: String,
       ref: "User",
       required: true,
     },

@@ -3,11 +3,11 @@ const { randomUUID } = require("crypto");
 
 const imageSchema = new mongoose.Schema({
   _id: {
-    type: mongoose.Schema.Types.UUID,
+    type: String,
     default: () => randomUUID(),
   },
   albumId: {
-    type: mongoose.Schema.Types.UUID,
+    type: String,
     ref: "Album",
     required: true,
   },

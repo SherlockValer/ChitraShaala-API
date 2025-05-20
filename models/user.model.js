@@ -3,7 +3,7 @@ const { randomUUID } = require("crypto");
 
 const userSchema = new mongoose.Schema({
   _id: {
-    type: mongoose.Schema.Types.UUID,
+    type: String,
     default: () => randomUUID(),
   },
   email: {
