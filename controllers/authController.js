@@ -3,6 +3,8 @@ const AppError = require("../utils/AppError");
 const dotenv = require("dotenv");
 const catchAsync = require("../utils/catchAsync");
 const setSecureCookies = require("../utils/setSecureCookies");
+const User = require("../models/user.model");
+const { signToken } = require("../utils/jwt");
 
 // load config files
 dotenv.config();
@@ -38,9 +40,28 @@ const getAccess = catchAsync(async (req, res, next) => {
     );
 
     accessToken = tokenResponse.data.access_token;
-    setSecureCookies(res, accessToken);
+
+    // Fetch user info from Google using access token
+    const userInfoResponse = await axios.get(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
+    const { email, name } = userInfoResponse.data;
+
+    // Check if user exists or create new
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({ email, name });
+    }
+
+    // Create your own JWT with user ID or email as payload
+    const token = signToken({ id: user._id, email: user.email });
+
+    // Set JWT in cookie (secure, httpOnly)
+    setSecureCookies(res, token);
+
     return res.redirect(`${process.env.FRONTEND_URL}`);
-    //
   } catch (error) {
     console.error(error);
   }
@@ -48,7 +69,7 @@ const getAccess = catchAsync(async (req, res, next) => {
 
 // logout
 const logout = catchAsync(async (req, res, next) => {
-  res.clearCookie("access_token");
+  res.clearCookie("jwt");
   res.send("You are successfully logged out.");
 });
 

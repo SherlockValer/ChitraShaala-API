@@ -1,7 +1,7 @@
 function setSecureCookies(res, token) {
   const isDev = process.env.NODE_ENV !== "production";
 
-  res.cookie("access_token", token, {
+  res.cookie("jwt", token, {
     path: "/",
     httpOnly: true,
     sameSite: "None", // this is crucial for cross-site
