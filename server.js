@@ -23,6 +23,9 @@ connectDB();
 // Create an instance of express
 const app = express();
 
+// Enable CORS
+app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
+
 // Body parser
 app.use(express.json());
 
@@ -49,9 +52,6 @@ app.use(limiter);
 
 // prevent http param pollution
 app.use(hpp());
-
-// Enable CORS
-app.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 
 // Compression
 app.use(compression());
