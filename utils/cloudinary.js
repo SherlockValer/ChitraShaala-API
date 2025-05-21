@@ -12,7 +12,7 @@ cloudinary.config({
 
 const uploadOnCloudinary = async (localFilePath) => {
   try {
-    if (!localFilePath) return new AppError("Something went wrong", 500);
+    if (!localFilePath) throw new AppError("No file path provided", 400);
 
     // upload the file on cloudinary
     const response = await cloudinary.uploader.upload(localFilePath, {
@@ -20,12 +20,21 @@ const uploadOnCloudinary = async (localFilePath) => {
       folder: "kavioPix",
     });
 
+    // Delete local file after upload
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath);
+    }
+
     // file has been uploaded successfully
-    fs.unlinkSync(localFilePath);
-    console.log("file is uploaded on cloudinary", response.secure_url);
+    console.log("✅ file is uploaded on cloudinary", response.secure_url);
     return response;
   } catch (error) {
-    fs.unlinkSync(localFilePath);
+    // Clean up file if something fails
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath);
+    }
+    console.error("❌ Cloudinary Upload Error:", error);
+
     new AppError("Failed to upload image", 500);
   }
 };
