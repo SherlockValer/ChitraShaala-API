@@ -45,6 +45,6 @@ router.post("/:albumId/images/:imageId/favorite", starImage);
 
 router.post("/:albumId/images/:imageId/comments", addComment);
 
-router.post("/:albumId/images/:imageId", deleteImage);
+router.delete("/:albumId/images/:imageId", deleteImage);
 
 module.exports = router;
