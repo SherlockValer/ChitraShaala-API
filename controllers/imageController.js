@@ -105,7 +105,7 @@ const addComment = catchAsync(async (req, res) => {
 
   const commented = await Image.findByIdAndUpdate(
     imageId,
-    { comments: comment, updatedAt: new Date() },
+    { $push: { comments: comment }, updatedAt: new Date() },
     { new: true }
   );
 
