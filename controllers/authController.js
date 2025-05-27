@@ -71,11 +71,12 @@ const getAccess = catchAsync(async (req, res, next) => {
 
 // logout
 const logout = catchAsync(async (req, res) => {
-  res.clearCookie("jwt", {
+  res.cookie("jwt", "", {
     path: "/",
     httpOnly: true,
     sameSite: "None",
     secure: !isDev,
+    expires: new Date(0),
   });
 
   res.status(200).json({
