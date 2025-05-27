@@ -68,9 +68,11 @@ const getAccess = catchAsync(async (req, res, next) => {
 });
 
 // logout
-const logout = catchAsync(async (req, res, next) => {
+const logout = catchAsync(async (req, res) => {
   res.clearCookie("jwt");
-  res.send("You are successfully logged out.");
+  res.status(200).json({
+    message: "You are successfully logged out.",
+  });
 });
 
 module.exports = { authorizeClient, getAccess, logout };
