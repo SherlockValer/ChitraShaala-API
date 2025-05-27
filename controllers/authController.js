@@ -10,6 +10,8 @@ const { signToken } = require("../utils/jwt");
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
+const isDev = process.env.NODE_ENV !== "production";
+
 // Authorize Client
 const authorizeClient = catchAsync(async (req, res) => {
   const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://kaviopix-api.vercel.app/v1/auth/google/callback&response_type=code&scope=profile email&prompt=select_account`;
@@ -69,7 +71,13 @@ const getAccess = catchAsync(async (req, res, next) => {
 
 // logout
 const logout = catchAsync(async (req, res) => {
-  res.clearCookie("jwt");
+  res.clearCookie("jwt", {
+    path: "/",
+    httpOnly: true,
+    sameSite: "None",
+    secure: !isDev,
+  });
+
   res.status(200).json({
     message: "You are successfully logged out.",
   });
