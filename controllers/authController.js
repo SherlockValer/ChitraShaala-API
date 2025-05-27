@@ -71,6 +71,8 @@ const getAccess = catchAsync(async (req, res, next) => {
 
 // logout
 const logout = catchAsync(async (req, res) => {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+
   res.cookie("jwt", "", {
     path: "/",
     httpOnly: true,
