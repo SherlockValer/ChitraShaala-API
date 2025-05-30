@@ -15,6 +15,19 @@ const getAlbums = catchAsync(async (req, res) => {
   });
 });
 
+const getOneAlbum = catchAsync(async (req, res) => {
+  const albumId = req.params;
+
+  verifyAlbumOwner(albumId, req);
+
+  const album = await Album.findById(albumId);
+
+  res.status(200).json({
+    status: "success",
+    album,
+  });
+});
+
 const createAlbum = catchAsync(async (req, res) => {
   const currentUser = req.user;
   const { name, description } = req.body;
@@ -76,4 +89,11 @@ const deleteAlbum = catchAsync(async (req, res) => {
   });
 });
 
-module.exports = { getAlbums, createAlbum, editAlbum, shareAlbum, deleteAlbum };
+module.exports = {
+  getAlbums,
+  getOneAlbum,
+  createAlbum,
+  editAlbum,
+  shareAlbum,
+  deleteAlbum,
+};

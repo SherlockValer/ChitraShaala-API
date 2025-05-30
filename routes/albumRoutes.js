@@ -5,6 +5,7 @@ const {
   editAlbum,
   shareAlbum,
   deleteAlbum,
+  getOneAlbum,
 } = require("../controllers/albumController");
 
 const {
@@ -22,6 +23,8 @@ const router = express.Router();
 //? Albums
 
 router.get("/", getAlbums);
+
+router.get("/:albumId", getOneAlbum);
 
 router.post("/", createAlbum);
 
