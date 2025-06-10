@@ -20,7 +20,7 @@ const getAlbums = catchAsync(async (req, res) => {
 const getOneAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner(albumId, req);
+  await verifyAlbumOwner(albumId, req);
 
   const album = await Album.findById(albumId);
 
@@ -52,7 +52,7 @@ const createAlbum = catchAsync(async (req, res) => {
 const editAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner(albumId, req);
+  await verifyAlbumOwner(albumId, req);
 
   const updateAlbum = await Album.findByIdAndUpdate(albumId, req.body, {
     new: true,
@@ -70,7 +70,7 @@ const shareAlbum = catchAsync(async (req, res, next) => {
   const { email } = req.body;
 
   // Verify Album Owner
-  verifyAlbumOwner(albumId, req);
+  await verifyAlbumOwner(albumId, req);
 
   // Check if user already exists in album
   const albumData = await Album.findById(albumId);
@@ -105,7 +105,7 @@ const unshareAlbum = catchAsync(async (req, res, next) => {
   const { email } = req.body;
 
   // Verify Album Owner
-  verifyAlbumOwner(albumId, req);
+  await verifyAlbumOwner(albumId, req);
 
   // delete user from album
   const unshared = await Album.findByIdAndUpdate(
@@ -123,7 +123,7 @@ const unshareAlbum = catchAsync(async (req, res, next) => {
 const deleteAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  verifyAlbumOwner(albumId, req);
+  await verifyAlbumOwner(albumId, req);
 
   const deleted = await Album.findByIdAndDelete(albumId);
 
