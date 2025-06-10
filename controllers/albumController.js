@@ -16,7 +16,7 @@ const getAlbums = catchAsync(async (req, res) => {
 });
 
 const getOneAlbum = catchAsync(async (req, res) => {
-  const albumId = req.params;
+  const { albumId } = req.params;
 
   verifyAlbumOwner(albumId, req);
 
