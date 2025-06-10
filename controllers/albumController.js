@@ -87,7 +87,7 @@ const shareAlbum = catchAsync(async (req, res, next) => {
 
   const shared = await Album.findByIdAndUpdate(
     albumId,
-    { $addToSet: { email } },
+    { $addToSet: { sharedUsers: email } },
     {
       new: true,
     }
