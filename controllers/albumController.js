@@ -75,14 +75,14 @@ const shareAlbum = catchAsync(async (req, res, next) => {
   // Check if user already exists in album
   const albumData = await Album.findById(albumId);
   if (albumData.sharedUsers.includes(email)) {
-    return next(AppError("User Already Exists!", 400));
+    return next(new AppError("User Already Exists!", 400));
   }
 
   // Check if user exists in database or not
   const userExistsInDB = await User.findOne({ email });
 
   if (!userExistsInDB || userExistsInDB._id === albumData.ownerId) {
-    return next(AppError("Invalid Email ID!", 400));
+    return next(new AppError("Invalid Email ID!", 400));
   }
 
   const shared = await Album.findByIdAndUpdate(
