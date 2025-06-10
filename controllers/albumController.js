@@ -65,7 +65,7 @@ const editAlbum = catchAsync(async (req, res) => {
 });
 
 // Share Album
-const shareAlbum = catchAsync(async (req, res) => {
+const shareAlbum = catchAsync(async (req, res, next) => {
   const { albumId } = req.params;
   const { email } = req.body;
 
