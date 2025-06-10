@@ -99,6 +99,27 @@ const shareAlbum = catchAsync(async (req, res, next) => {
   });
 });
 
+// Remove access to album
+const unshareAlbum = catchAsync(async (req, res, next) => {
+  const { albumId } = req.params;
+  const { email } = req.body;
+
+  // Verify Album Owner
+  verifyAlbumOwner(albumId, req);
+
+  // delete user from album
+  const unshared = await Album.findByIdAndUpdate(
+    albumId,
+    { $pull: { sharedUsers: email } },
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: "success",
+    unshared,
+  });
+});
+
 const deleteAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
@@ -118,5 +139,6 @@ module.exports = {
   createAlbum,
   editAlbum,
   shareAlbum,
+  unshareAlbum,
   deleteAlbum,
 };

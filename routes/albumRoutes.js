@@ -6,6 +6,7 @@ const {
   shareAlbum,
   deleteAlbum,
   getOneAlbum,
+  unshareAlbum,
 } = require("../controllers/albumController");
 
 const {
@@ -31,6 +32,8 @@ router.post("/", createAlbum);
 router.post("/:albumId", editAlbum);
 
 router.post("/:albumId/share", shareAlbum);
+
+router.post("/:albumId/unshare", unshareAlbum);
 
 router.delete("/:albumId", deleteAlbum);
 
