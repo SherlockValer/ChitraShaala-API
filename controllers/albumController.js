@@ -1,6 +1,8 @@
 const catchAsync = require("../utils/catchAsync");
 const Album = require("../models/album.model");
+const User = require("../models/user.model");
 const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
+const AppError = require("../utils/AppError");
 
 const getAlbums = catchAsync(async (req, res) => {
   const currentUser = req.user;
@@ -46,6 +48,7 @@ const createAlbum = catchAsync(async (req, res) => {
   });
 });
 
+// Edit Album
 const editAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
@@ -61,14 +64,34 @@ const editAlbum = catchAsync(async (req, res) => {
   });
 });
 
+// Share Album
 const shareAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
+  const { email } = req.body;
 
+  // Verify Album Owner
   verifyAlbumOwner(albumId, req);
 
-  const shared = await Album.findByIdAndUpdate(albumId, req.body, {
-    new: true,
-  });
+  // Check if user already exists in album
+  const albumData = await Album.findById(albumId);
+  if (albumData.sharedUsers.includes(email)) {
+    return next(AppError("User Already Exists!", 400));
+  }
+
+  // Check if user exists in database or not
+  const userExistsInDB = await User.findOne({ email });
+
+  if (!userExistsInDB) {
+    return next(AppError("Invalid User!", 400));
+  }
+
+  const shared = await Album.findByIdAndUpdate(
+    albumId,
+    { $addToSet: { email } },
+    {
+      new: true,
+    }
+  );
 
   res.status(200).json({
     status: "success",
