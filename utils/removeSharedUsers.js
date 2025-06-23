@@ -1,6 +1,8 @@
-export function removeSharedUsers(album, userId) {
+const Album = require("../models/album.model.js");
+
+async function removeSharedUsers(album, userId) {
   if (album.ownerId !== userId) {
-    const { sharedUsers, ...newObject } = album;
-    return newObject;
+    const res = await Album.findById(album._id, { sharedUsers: 0 });
+    return res;
   }
 }

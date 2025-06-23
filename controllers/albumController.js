@@ -9,12 +9,10 @@ const getAlbums = catchAsync(async (req, res) => {
   const currentUser = req.user;
 
   const myAlbums = await Album.find({ ownerId: currentUser._id });
-  const shared = await Album.find({ sharedUsers: currentUser.email });
-
-  const sharedAlbums = shared.map(album => {
-    const {sharedUsers, ...newObject} = album
-    return newObject
-  })
+  const sharedAlbums = await Album.find(
+    { sharedUsers: currentUser.email },
+    { sharedUsers: 0 }
+  );
 
   res.status(200).json({
     status: "success",
@@ -27,8 +25,8 @@ const getOneAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
   const response = await Album.findById(albumId);
-  
-  const album = removeSharedUsers(response, req.user._id)
+
+  const album = removeSharedUsers(response, req.user._id);
 
   res.status(200).json({
     status: "success",
