@@ -8,7 +8,6 @@ const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
 
 const getImages = catchAsync(async (req, res) => {
   const { albumId } = req.params;
-  await verifyAlbumOwner(albumId, req);
 
   const images = await Image.find({ albumId });
 
