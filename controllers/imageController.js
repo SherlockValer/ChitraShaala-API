@@ -52,7 +52,11 @@ const getImagesByTag = catchAsync(async (req, res) => {
 //! POST
 
 const uploadImage = catchAsync(async (req, res, next) => {
-  console.log(req.file);
+  const metadata = {}
+  metadata.tags = req.body.tags || []
+  if(req.body.person) {
+    metadata.person = req.body.person
+  }
 
   if (!req.file) {
     return next(new AppError("No file uploaded", 400));
@@ -64,11 +68,13 @@ const uploadImage = catchAsync(async (req, res, next) => {
   // upload to cloudinary
   const response = await uploadOnCloudinary(req.file.path);
 
+
   // save link to mongodb
   const newImage = new Image({
     albumId,
     name: req.file.originalname,
     url: response.secure_url,
+    ...metadata // Add extra metadata (tags, person)
   });
   await newImage.save();
 
