@@ -3,12 +3,18 @@ const Album = require("../models/album.model");
 const User = require("../models/user.model");
 const { verifyAlbumOwner } = require("../utils/verifyAlbumOwner");
 const AppError = require("../utils/AppError");
+const { removeSharedUsers } = require("../utils/removeSharedUsers.js");
 
 const getAlbums = catchAsync(async (req, res) => {
   const currentUser = req.user;
 
   const myAlbums = await Album.find({ ownerId: currentUser._id });
-  const sharedAlbums = await Album.find({ sharedUsers: currentUser.email });
+  const shared = await Album.find({ sharedUsers: currentUser.email });
+
+  const sharedAlbums = shared.map(album => {
+    const {sharedUsers, ...newObject} = album
+    return newObject
+  })
 
   res.status(200).json({
     status: "success",
@@ -20,9 +26,9 @@ const getAlbums = catchAsync(async (req, res) => {
 const getOneAlbum = catchAsync(async (req, res) => {
   const { albumId } = req.params;
 
-  await verifyAlbumOwner(albumId, req);
-
-  const album = await Album.findById(albumId);
+  const response = await Album.findById(albumId);
+  
+  const album = removeSharedUsers(response, req.user._id)
 
   res.status(200).json({
     status: "success",
