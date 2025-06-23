@@ -1,4 +1,4 @@
-# 📡 kavioPix API
+# 📡 ChitraShaala API
 
 A RESTful API built with Node.js and Express that provides endpoints for an API-based image management system similar to Google Photos with authentication through Google Auth. Designed for scalability and easy integration.
 
@@ -25,10 +25,10 @@ A RESTful API built with Node.js and Express that provides endpoints for an API-
 
 ```bash
 # Clone the repo
-git clone https://github.com/SherlockValer/kaviopix-api
+git clone https://github.com/SherlockValer/ChitraShaala-API
 
 # Navigate into the folder
-cd kaviopix-api
+cd ChitraShaala-API
 
 # Install dependencies
 npm install
@@ -114,7 +114,7 @@ Server will start at: `http://localhost:3000`
 ## 📁 Folder Structure
 
 ```
-kaviopix-api/
+ChitraShaala-API/
 ├── config/
 ├── controllers/
 ├── middlewares/
