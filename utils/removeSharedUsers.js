@@ -4,5 +4,7 @@ export async function removeSharedUsers(album, userId) {
   if (album.ownerId !== userId) {
     const res = await Album.findById(album._id, { sharedUsers: 0 });
     return res;
+  } else {
+    return album;
   }
 }
