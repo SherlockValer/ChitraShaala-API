@@ -26,10 +26,7 @@ const getOneAlbum = catchAsync(async (req, res) => {
 
   const response = await Album.findById(albumId);
 
-  let album;
-  if (response.ownerId !== req.user._id) {
-    album = removeSharedUsers(response, req.user._id);
-  }
+  const album = removeSharedUsers(response, req.user._id);
 
   res.status(200).json({
     status: "success",
